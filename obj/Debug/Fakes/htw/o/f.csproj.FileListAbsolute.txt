@@ -1,0 +1,9 @@
+C:\Users\BrotherKai\Desktop\helix-toolkit-master\Source\Examples\WPF\SolarsystemDemo\obj\Debug\Fakes\htw\b\HelixToolkit.Wpf.Fakes.xml
+C:\Users\BrotherKai\Desktop\helix-toolkit-master\Source\Examples\WPF\SolarsystemDemo\obj\Debug\Fakes\htw\b\HelixToolkit.Wpf.Fakes.dll
+C:\Users\BrotherKai\Desktop\helix-toolkit-master\Source\Examples\WPF\SolarsystemDemo\obj\Debug\Fakes\htw\b\HelixToolkit.Wpf.Fakes.pdb
+C:\Users\BrotherKai\Desktop\helix-toolkit-master\Source\Examples\WPF\SolarsystemDemo\obj\Debug\Fakes\htw\b\HelixToolkit.Wpf.dll
+C:\Users\BrotherKai\Desktop\helix-toolkit-master\Source\Examples\WPF\SolarsystemDemo\obj\Debug\Fakes\htw\b\Microsoft.QualityTools.Testing.Fakes.dll
+C:\Users\BrotherKai\Desktop\helix-toolkit-master\Source\Examples\WPF\SolarsystemDemo\obj\Debug\Fakes\htw\b\HelixToolkit.Wpf.pdb
+C:\Users\BrotherKai\Desktop\helix-toolkit-master\Source\Examples\WPF\SolarsystemDemo\obj\Debug\Fakes\htw\o\f.csprojResolveAssemblyReference.cache
+C:\Users\BrotherKai\Desktop\helix-toolkit-master\Source\Examples\WPF\SolarsystemDemo\obj\Debug\Fakes\htw\o\HelixToolkit.Wpf.Fakes.dll
+C:\Users\BrotherKai\Desktop\helix-toolkit-master\Source\Examples\WPF\SolarsystemDemo\obj\Debug\Fakes\htw\o\HelixToolkit.Wpf.Fakes.pdb
