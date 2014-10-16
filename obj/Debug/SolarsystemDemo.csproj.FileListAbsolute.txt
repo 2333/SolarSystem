@@ -39,3 +39,6 @@ C:\Users\BrotherKai\Desktop\helix-toolkit-master\Source\Examples\WPF\Solarsystem
 C:\Users\BrotherKai\Desktop\helix-toolkit-master\Source\Examples\WPF\SolarsystemDemo\obj\Debug\SolarsystemDemo.csproj.GenerateResource.Cache
 C:\Users\BrotherKai\Desktop\helix-toolkit-master\Source\Examples\WPF\SolarsystemDemo\obj\Debug\SolarsystemDemo.exe
 C:\Users\BrotherKai\Desktop\helix-toolkit-master\Source\Examples\WPF\SolarsystemDemo\obj\Debug\SolarsystemDemo.pdb
+C:\Users\ziew\Documents\GitHub\SolarSystem\bin\Debug\SolarsystemDemo.exe.config
+C:\Users\ziew\Documents\GitHub\SolarSystem\obj\Debug\SolarsystemDemo.exe
+C:\Users\ziew\Documents\GitHub\SolarSystem\obj\Debug\SolarsystemDemo.pdb
