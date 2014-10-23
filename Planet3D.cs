@@ -90,9 +90,9 @@ namespace SolarsystemDemo
             Point3D p = new Point3D(Math.Cos(angle) * a, Math.Sin(angle) * b, 0);
             return p;
         }
-        public Point3D ReadPosition(string fileName)
+        public Point3DCollection ReadPosition(string fileName)
         {
-            StreamReader fileReader = new StreamReader("Orbit/" + fileName + ".txt");
+            StreamReader fileReader = new StreamReader("../../Orbit/" + fileName + ".txt");
             string newLine = "";
             ArrayList posList = new ArrayList();
 
@@ -100,12 +100,25 @@ namespace SolarsystemDemo
             {
                 newLine = fileReader.ReadLine();
                 if (newLine != null)
-                    posList.Add(newLine.Split(' '));
-               
-
+                {
+                    newLine = newLine.Trim();
+                    string[] tmp = newLine.Split(' ');
+                    for (int i = 0; i <= 2; i++)
+                        posList.Add(tmp[i]);
+                }
             }
-            Point3D p = new Point3D(0,0,0);
-            return p;
+                    
+            fileReader.Close();
+            Point3D p;
+            Point3DCollection pointCollection = new Point3DCollection();
+            for (int i = 0; i < posList.Count; )
+            {
+                p = new Point3D(Convert.ToDouble(posList[i++]) / SolarSystem.DistanceScale,
+                        Convert.ToDouble(posList[i++]) / SolarSystem.DistanceScale,
+                        Convert.ToDouble(posList[i++]) / SolarSystem.DistanceScale);
+                    pointCollection.Add(p);
+            }
+                return pointCollection;
         }
 
         public void UpdateTransform()
@@ -120,15 +133,28 @@ namespace SolarsystemDemo
 
         public void UpdateOrbit()
         {
-            if (SemiMajorAxis > 0)
+            try
             {
-                int n = 90;
-                var path = new Point3DCollection();
-                for (int i = 0; i < n; i++)
-                    path.Add(CalculatePosition((double)i / (n - 1) * Math.PI * 2, SolarSystem.DistanceScale));
-
-                orbit.Path = path;
+                if (ObjectName == "Venus" || ObjectName == "Mercury" || ObjectName == "Earth" || ObjectName == "Mars") 
+                {
+                orbit.Path = ReadPosition(ObjectName);
                 orbit.UpdateModel();
+                }
+                else if (SemiMajorAxis > 0)
+                {
+                    int n = 90;
+                    var path = new Point3DCollection();
+                    for (int i = 0; i < n; i++)
+                        path.Add(CalculatePosition((double)i / (n - 1) * Math.PI * 2, SolarSystem.DistanceScale));
+
+                    orbit.Path = path;
+                    orbit.UpdateModel();
+                }
+            }
+            catch (Exception)
+            {
+
+                throw;
             }
 
             Sphere.Radius = MeanRadius / SolarSystem.DiameterScale;

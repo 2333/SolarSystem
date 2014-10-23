@@ -16,6 +16,8 @@ using System.Windows.Threading;
 using System.ComponentModel;
 using HelixToolkit.Wpf;
 using System.Windows.Media.Imaging;
+using System.Collections;
+using System.IO;
 
 namespace SolarsystemDemo
 {
@@ -53,6 +55,37 @@ namespace SolarsystemDemo
             return p;
         }
 
+        public Point3DCollection ReadPosition(string fileName)
+        {
+            StreamReader fileReader = new StreamReader("../../Orbit/" + fileName + ".txt");
+            string newLine = "";
+            ArrayList posList = new ArrayList();
+
+            while (newLine != null)
+            {
+                newLine = fileReader.ReadLine();
+                if (newLine != null)
+                {
+                    newLine = newLine.Trim();
+                    string[] tmp = newLine.Split(' ');
+                    for (int i = 0; i <= 2; i++)
+                        posList.Add(tmp[i]);
+                }
+            }
+
+            fileReader.Close();
+            Point3D p;
+            Point3DCollection pointCollection = new Point3DCollection();
+            for (int i = 0; i < posList.Count; )
+            {
+                p = new Point3D(Convert.ToDouble(posList[i++]) / Planet.DistanceScale,
+                        Convert.ToDouble(posList[i++]) / Planet.DistanceScale,
+                        Convert.ToDouble(posList[i++]) / Planet.DistanceScale);
+                pointCollection.Add(p);
+            }
+            return pointCollection;
+        }
+
         public void UpdateTransform()
         {
             var tg = new Transform3DGroup();
@@ -67,7 +100,12 @@ namespace SolarsystemDemo
 
         public void UpdateOrbit()
         {
-            if (SemiMajorAxis > 0)
+            if (ObjectName == "Moon") 
+            {
+                orbit.Path = ReadPosition(ObjectName);
+                orbit.UpdateModel();
+            }
+            else if (SemiMajorAxis > 0)
             {
                 int n = 90;
                 var path = new Point3DCollection();
