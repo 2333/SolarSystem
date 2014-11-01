@@ -17,12 +17,13 @@ namespace SolarsystemDemo
 {
     public class Planet3D : TexturedObject3D
     {
+        public IList<BillboardTextItem> TextItem;
         public double Aphelion { get; set; }
         public double Perifelion { get; set; }
         public double SemiMajorAxis { get; set; }
         public double Eccentricity { get; set; }
         public double OrbitalPeriod { get; set; }
-
+        //public bool Ischecked { get; set; }
         /// <summary>
         /// Inclination to invariable plane
         /// http://en.wikipedia.org/wiki/Inclination
@@ -70,7 +71,7 @@ namespace SolarsystemDemo
         {
             Satellites = new List<Satellite3D>();
 
-            orbit = new TubeVisual3D() {Diameter=0.8, ThetaDiv = 16 };
+            orbit = new TubeVisual3D() {Diameter=0.8, ThetaDiv = 160 };
             orbit.Material = MaterialHelper.CreateMaterial(null,Brushes.Blue,Brushes.Gray,0.5, 20);
             Children.Add(orbit);
             Sign = new BillboardTextVisual3D()
@@ -90,6 +91,7 @@ namespace SolarsystemDemo
             Point3D p = new Point3D(Math.Cos(angle) * a, Math.Sin(angle) * b, 0);
             return p;
         }
+        //从文件中读取行星的轨道数据
         public Point3DCollection ReadPosition(string fileName)
         {
             StreamReader fileReader = new StreamReader("../../Orbit/" + fileName + ".txt");
@@ -177,12 +179,18 @@ namespace SolarsystemDemo
             tg.Children.Add(new TranslateTransform3D(Position.X, Position.Y, Position.Z));
             Sphere.Transform = tg;
             var stg = new Transform3DGroup();
-            stg.Children.Add(new TranslateTransform3D(Position.X, Position.Y-1e1, Position.Z+1e1));
+
+            if (base.ObjectName != "Sun")
+                stg.Children.Add(new TranslateTransform3D(Position.X, Position.Y - 1e1, Position.Z + Sphere.Radius * 2));
+            else
+            {
+                stg.Children.Add(new TranslateTransform3D(0, 0, 0));
+                Sign.Height = 0;
+            }
             Sign.Foreground = foreground;
             Sign.Background = background;
             Sign.BorderThickness = borderthickness;
             Sign.FontFamily = font;
-            //Sign.Position = Position;
             Sign.Text = base.ObjectName;
             Sign.Transform = stg;
         }

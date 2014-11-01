@@ -14,6 +14,7 @@ using System.Windows.Data;
 using System.Windows;
 using System.Windows.Threading;
 using System.ComponentModel;
+using HelixToolkit.Wpf;
 
 namespace SolarsystemDemo
 {
@@ -22,6 +23,17 @@ namespace SolarsystemDemo
         public double DistanceScale { get; set; }
         public double DiameterScale { get; set; }
 
+        private IList<BillboardTextItem> _textItem;
+        public IList<BillboardTextItem> TextItem 
+        {
+            get { return _textItem; }
+            set 
+            { 
+                _textItem = value;
+                OnPropertyChanged("TextItem");
+            }
+        }
+ 
         double _days = 0;
         DateTime Time0;
 
@@ -45,18 +57,29 @@ namespace SolarsystemDemo
         public SolarSystem3D()
         {
             Time0 = DateTime.Now;
+            this._textItem = new List<BillboardTextItem>();
+            this._textItem.Add(new BillboardTextItem { Text = "HXMT", Position = new Point3D(100, 100, 0), WorldDepthOffset = 50 });
+            this._textItem.Add(new BillboardTextItem { Text = "SUN", Position = new Point3D(0, 0, 0), WorldDepthOffset = 100 });
+            //foreach(Satellite3D p in Children){
+            //    if(p.ObjectName == "Moon")
+            //        this._textItem.Add(new BillboardTextItem{Text = "Moon", Position = new Point3D(p.CalculatePosition)})
+
+            //}
         }
 
         public void InitModel()
         {
             foreach (Planet3D p in Children)
                 p.InitModel(this);
+            //this.TextItem.Add(new BillboardTextItem{Text = "HXMT" ,Position = new Point3D(100,100,0), WorldDepthOffset= 50});
         }
 
         public void UpdateModel()
         {
             foreach (Planet3D p in Children)
                 p.UpdateModel();
+            //this.TextItem.Add(new BillboardTextItem { Text = "HXMT", Position = new Point3D(100, 100, 0), WorldDepthOffset = 50});
+            //OnPropertyChanged("TextItem");
         }
 
         protected virtual void OnPropertyChanged(string propertyName)
@@ -67,7 +90,7 @@ namespace SolarsystemDemo
                 handler(this, new PropertyChangedEventArgs(propertyName));
             }
         }
-
+        
         public event PropertyChangedEventHandler PropertyChanged;
     }
 }

@@ -3,20 +3,23 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:helix="clr-namespace:HelixToolkit.Wpf;assembly=HelixToolkit.Wpf"
     xmlns:s="clr-namespace:SolarsystemDemo"
+        xmlns:local="clr-namespace:SolarsystemDemo"
     Title="SolarSystemDemo" Height="480" Width="640"
     >
 
     <Window.Resources>
+        <local:CameraMaxValue x:Key="CameraMaxValueConverter"></local:CameraMaxValue>
     </Window.Resources>
     <Window.Background>
-        <ImageBrush ImageSource="Textures/space3.jpg" TileMode="FlipXY" Viewport="0,0, 0.5,0.5"/>
+        <ImageBrush ImageSource="Textures/skybox/cube_b.jpg" TileMode="FlipX" Viewport="0,0, 0.5,0.5"/>
     </Window.Background>
     <DockPanel>
         <DockPanel DockPanel.Dock="Top" Margin="8">
             <TextBlock Text="{Binding Time, StringFormat={}{0:u}}" Foreground="White" Width="140" HorizontalAlignment="Center" DockPanel.Dock="Right"/>
             <Slider Name="TimeSlider" DockPanel.Dock="Top" Value="{Binding Days}" Minimum="0" Maximum="365"/>
+            <CheckBox x:Name="EarthView" Content="Earth View" Checked="EarthView_Checked" DockPanel.Dock="Bottom" Foreground="White" Margin="0,5,5,0" Unchecked="EarthView_Unchecked"/>
         </DockPanel>
-        <helix:HelixViewport3D x:Name="view1" InfiniteSpin="true">
+        <helix:HelixViewport3D x:Name="view1" InfiniteSpin="False" ShowCameraInfo="True" ShowFieldOfView="False" ShowCoordinateSystem="True" >
             <!-- Sun light -->
             <ModelVisual3D>
                 <ModelVisual3D.Content>
@@ -32,12 +35,12 @@
             <s:SolarSystem3D DistanceScale="1e6" DiameterScale="1e3">
                 <s:Planet3D ObjectName="Sun" MeanRadius="13920" RotationPeriod="25.379995" foreground="Transparent" background="Transparent" />
                 <s:Planet3D ObjectName="Mercury" 
-                                    Aphelion="0" Perifelion="0" 
+                                    Aphelion="69816900" Perifelion="46001200" 
                                     SemiMajorAxis="57909100" Eccentricity="0.205630" 
                                     OrbitalPeriod="87.969 " 
                                     Inclination="6.34" LongitudeOfAscendingNode="48.331" ArgumentOfPerihelion="29.124"
                                     MeanRadius="2439.7" RotationPeriod="58.6462"
-                                    foreground="White" background="Transparent" borderbrush="Transparent" borderthickness="0" height="1e4" padding="0" depthoffset="1e2" font="Courier New"/>
+                                    foreground="White" background="Transparent" borderbrush="Transparent" borderthickness="0" height="1e4" padding="0" depthoffset="0" font="Courier New"/>
                 <s:Planet3D ObjectName="Venus" 
                                     Aphelion="108942109" Perifelion="107476259" 
                                     SemiMajorAxis="108208930" Eccentricity="0.0068" 
@@ -71,7 +74,7 @@
                                     Inclination="1.67" LongitudeOfAscendingNode="49.562" ArgumentOfPerihelion="286.537"
                                     MeanRadius="2439.7" RotationPeriod="1.02595675"
                                     DistanceScale="2e3" DiameterScale="1e1"
-                                    foreground="White" background="Transparent" borderbrush="Transparent" borderthickness="1" height="1e4" padding="2" depthoffset="1e2" font="Arial">
+                                    foreground="White" background="Transparent" borderbrush="Transparent" borderthickness="1" height="1e4" padding="2" depthoffset="1e2" font="Courier New">
                     <s:Planet3D.Satellites>
                         <s:Satellite3D ObjectName="Phobos" Perigee="0" Apogee="0" SemiMajorAxis="9377.2" 
                                          Eccentricity="0.0151" OrbitalPeriod="0.31891023" Inclination="26.04"
@@ -112,15 +115,15 @@
                                     Inclination="0.72" LongitudeOfAscendingNode="131.794310" ArgumentOfPerihelion="265.646853"
                                     MeanRadius="24764" RotationPeriod="0.67125"
                                     foreground="White" background="Transparent" borderbrush="Transparent" borderthickness="1" height="1e4" padding="2" depthoffset="1e-3" font="Arial"/>
+
             </s:SolarSystem3D>
             <helix:SunLight/>
-            <!--<helix:BillboardTextVisual3D
-                Foreground="Black" 
-                Background="LightBlue" BorderBrush="DarkBlue" BorderThickness="1" Height="1e3" Padding="2" FontFamily="Arial" FontWeight="Normal"
-                Position="1e2,1,0" HorizontalAlignment="Center" VerticalAlignment="Center" Text="TextBillboardVisual3D with DepthOffset" DepthOffset="1e-3" >
-            </helix:BillboardTextVisual3D>-->
-            <!--<helix:TextVisual3D FontFamily="Arial" Text="This is demo!" FontSize="40" Height="40" Position="0,50,0" Foreground="White"/>-->
+            <helix:CoordinateSystemVisual3D />
+            <helix:BillboardTextGroupVisual3D  x:Name="pinBoard" IsEnabled="True" BorderThickness="1" Padding="1" Offset="50,50" Items="{Binding TextItem}" Foreground="Yellow" FontSize="20" PinBrush="White" BorderBrush="White">
 
+            </helix:BillboardTextGroupVisual3D>
+            <helix:SphereVisual3D Center="100,100,0" Radius="3" Fill="Yellow" />
+            <helix:PanoramaCube3D x:Name="panoramaCube3D" Source="Textures\skybox\" Size="{Binding Camera, ElementName=view1,Converter={StaticResource CameraMaxValueConverter}}" />
         </helix:HelixViewport3D>
     </DockPanel>
 </Window>

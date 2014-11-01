@@ -19,6 +19,7 @@ using System.Windows.Navigation;
 using System.Windows.Shapes;
 using System.ComponentModel;
 using System.Windows.Media.Media3D;
+using HelixToolkit.Wpf;
 
 namespace SolarsystemDemo
 {
@@ -36,17 +37,40 @@ namespace SolarsystemDemo
 
             view1.Camera.Position = new Point3D(0, 400, 500);
             view1.Camera.LookDirection = new Vector3D(0, -400, -500);
+            //view1.Camera.FarPlaneDistance = 10000;
+            //view1.CameraController.
             SolarSystem = view1.Children[2] as SolarSystem3D;
+            
+            Loaded += new RoutedEventHandler(Window1_Loaded);
             DataContext = SolarSystem;
 
-            Loaded += new RoutedEventHandler(Window1_Loaded);
         }
 
         void Window1_Loaded(object sender, RoutedEventArgs e)
         {
             SolarSystem.InitModel();
-            SolarSystem.UpdateModel();
+            SolarSystem.UpdateModel();            
         }
-        
+
+        private void EarthView_Checked(object sender, RoutedEventArgs e)
+        {
+            if(view1!=null)
+            {
+                foreach (Planet3D p in SolarSystem.Children)
+                    if (p.ObjectName == "Earth")
+                    {
+                        view1.Camera.Position = new Point3D(p.Position.X + 50, p.Position.Y + 50, p.Position.Z + 50);
+                        view1.Camera.LookDirection = new Vector3D(-50,-50,-50);
+                        view1.Camera.UpDirection = new Vector3D(0, 0, 1);
+                    }
+
+            }
+        }
+
+        private void EarthView_Unchecked(object sender, RoutedEventArgs e)
+        {
+            view1.Camera.Position = new Point3D(0, 400, 500);
+            view1.Camera.LookDirection = new Vector3D(0, -400, -500);
+        }
     }
 }
