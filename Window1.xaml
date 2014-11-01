@@ -19,7 +19,7 @@
             <Slider Name="TimeSlider" DockPanel.Dock="Top" Value="{Binding Days}" Minimum="0" Maximum="365"/>
             <CheckBox x:Name="EarthView" Content="Earth View" IsChecked="False" DockPanel.Dock="Bottom" Foreground="White" Margin="0,5,5,0"/>
         </DockPanel>
-        <helix:HelixViewport3D x:Name="view1" InfiniteSpin="true" ShowCameraInfo="True" ShowFieldOfView="True" ShowCoordinateSystem="True" >
+        <helix:HelixViewport3D x:Name="view1" InfiniteSpin="true" ShowCameraInfo="True" ShowCoordinateSystem="True" >
             <!-- Sun light -->
             <ModelVisual3D>
                 <ModelVisual3D.Content>
@@ -119,9 +119,8 @@
             </s:SolarSystem3D>
             <helix:SunLight/>
             <helix:CoordinateSystemVisual3D />
-            <helix:BillboardTextGroupVisual3D x:Name="pinBoard" IsEnabled="True" BorderThickness="1" Padding="1" Offset="50,50" Items="{Binding TextItem}" Foreground="White" FontSize="20" PinBrush="White"/>
+            <helix:BillboardTextGroupVisual3D x:Name="pinBoard" IsEnabled="True" BorderThickness="1" Padding="1" Offset="50,50" Items="{Binding TextItem}" Foreground="Yellow" FontSize="20" PinBrush="White"/>
             <helix:SphereVisual3D Center="100,100,0" Radius="5" Fill="Yellow" />
-            <helix:BoxVisual3D Center="100,100,0" Length="10" Width="10" Height="10" Fill="Green" />
             <helix:PanoramaCube3D x:Name="panoramaCube3D" Source="Textures\skybox\" Size="{Binding Camera, ElementName=view1,Converter={StaticResource CameraMaxValueConverter}}" />
         </helix:HelixViewport3D>
     </DockPanel>
