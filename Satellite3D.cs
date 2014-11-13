@@ -38,12 +38,25 @@ namespace SolarsystemDemo
         public SolarSystem3D SolarSystem { get; set; }
         TubeVisual3D orbit;
 
+        private IList<BillboardTextItem> _textItem;
+        public IList<BillboardTextItem> TextItem
+        {
+            get { return _textItem; }
+            set
+            {
+                _textItem = value;
+                OnPropertyChanged("TextItem");
+            }
+        }
+
         public Satellite3D()
         {
             orbit = new TubeVisual3D() { Diameter = 0.3, ThetaDiv = 12 };
             orbit.Material = MaterialHelper.CreateMaterial(null, Brushes.Gray, Brushes.White, 0.5, 40);
 
             Children.Add(orbit);
+            //if (ObjectName != null)
+            //    this._textItem.Add(new BillboardTextItem { Text = ObjectName, Position = new Point3D(100, 100, 100), WorldDepthOffset = 50 });
         }
 
         public Point3D CalculatePosition(double angle, double scale)
@@ -159,5 +172,15 @@ namespace SolarsystemDemo
             UpdatePosition();
         }
 
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            var handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+        
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }

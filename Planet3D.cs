@@ -12,9 +12,12 @@ using HelixToolkit.Wpf;
 using System.Windows;
 using System.IO;
 using System.Collections;
+using System.Runtime.InteropServices;
+
 
 namespace SolarsystemDemo
 {
+    //[DllImport("ZBZH_PLANET.dll")]
     public class Planet3D : TexturedObject3D
     {
         public IList<BillboardTextItem> TextItem;
@@ -66,13 +69,13 @@ namespace SolarsystemDemo
 
         TubeVisual3D orbit;
         public Point3D Position { get; set; }
-        
+
         public Planet3D()
         {
             Satellites = new List<Satellite3D>();
 
             orbit = new TubeVisual3D() {Diameter=0.8, ThetaDiv = 160 };
-            orbit.Material = MaterialHelper.CreateMaterial(null,Brushes.Blue,Brushes.Gray,0.5, 20);
+            orbit.Material = MaterialHelper.CreateMaterial(null,Brushes.Blue,Brushes.Gray,0.5, 0);
             Children.Add(orbit);
             Sign = new BillboardTextVisual3D()
             {

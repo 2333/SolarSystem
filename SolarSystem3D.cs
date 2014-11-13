@@ -58,7 +58,7 @@ namespace SolarsystemDemo
         {
             Time0 = DateTime.Now;
             this._textItem = new List<BillboardTextItem>();
-            this._textItem.Add(new BillboardTextItem { Text = "HXMT", Position = new Point3D(100, 100, 0), WorldDepthOffset = 50 });
+            this._textItem.Add(new BillboardTextItem { Text = "HXMT", Position = new Point3D(100, 100, 0), WorldDepthOffset = 50});
             this._textItem.Add(new BillboardTextItem { Text = "SUN", Position = new Point3D(0, 0, 0), WorldDepthOffset = 100 });
             //foreach(Satellite3D p in Children){
             //    if(p.ObjectName == "Moon")
