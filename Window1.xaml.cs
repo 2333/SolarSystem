@@ -30,7 +30,6 @@ namespace SolarsystemDemo
     {
 
         SolarSystem3D SolarSystem;
-        double _max = 0;
 
         public Window1()
         {
@@ -44,6 +43,7 @@ namespace SolarsystemDemo
             
             Loaded += new RoutedEventHandler(Window1_Loaded);
             DataContext = SolarSystem;
+            
         }
 
         void Window1_Loaded(object sender, RoutedEventArgs e)
@@ -51,19 +51,26 @@ namespace SolarsystemDemo
             SolarSystem.InitModel();
             SolarSystem.UpdateModel();            
         }
-        public double max
+
+        private void EarthView_Checked(object sender, RoutedEventArgs e)
         {
-            get
+            if(view1!=null)
             {
-                double max;
-                max = view1.Camera.Position.X >= view1.Camera.Position.Y ? view1.Camera.Position.X : view1.Camera.Position.Y;
-                max = max >= view1.Camera.Position.Z ? max : view1.Camera.Position.Z;
-                return max;
+                foreach (Planet3D p in SolarSystem.Children)
+                    if (p.ObjectName == "Earth")
+                    {
+                        view1.Camera.Position = new Point3D(p.Position.X + 50, p.Position.Y + 50, p.Position.Z + 50);
+                        view1.Camera.LookDirection = new Vector3D(-50,-50,-50);
+                        view1.Camera.UpDirection = new Vector3D(0, 0, 1);
+                    }
+
             }
-            set
-            {
-                max = value;
-            }
+        }
+
+        private void EarthView_Unchecked(object sender, RoutedEventArgs e)
+        {
+            view1.Camera.Position = new Point3D(0, 400, 500);
+            view1.Camera.LookDirection = new Vector3D(0, -400, -500);
         }
     }
 }

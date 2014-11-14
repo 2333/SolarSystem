@@ -33,7 +33,7 @@ namespace SolarsystemDemo
         //  public double ArgumentOfPerihelion {get; set; }
         public double AxialTilt { get; set; }
         public double RotationPeriod { get; set; }
-
+   
         public Planet3D Planet { get; set; }
         public SolarSystem3D SolarSystem { get; set; }
         TubeVisual3D orbit;
@@ -57,6 +57,7 @@ namespace SolarsystemDemo
 
         public Point3DCollection ReadPosition(string fileName)
         {
+            //从文件中读取轨道信息
             StreamReader fileReader = new StreamReader("../../Orbit/" + fileName + ".txt");
             string newLine = "";
             ArrayList posList = new ArrayList();
@@ -72,15 +73,20 @@ namespace SolarsystemDemo
                         posList.Add(tmp[i]);
                 }
             }
-
             fileReader.Close();
+            
             Point3D p;
             Point3DCollection pointCollection = new Point3DCollection();
+            double posx = Planet.Position.X;
+            double posy = Planet.Position.Y;
+            double posz = Planet.Position.Z;
+
+
             for (int i = 0; i < posList.Count; )
             {
-                p = new Point3D(Convert.ToDouble(posList[i++]) / Planet.DistanceScale,
-                        Convert.ToDouble(posList[i++]) / Planet.DistanceScale,
-                        Convert.ToDouble(posList[i++]) / Planet.DistanceScale);
+                p = new Point3D((Convert.ToDouble(posList[i++]) + posx) / Planet.DistanceScale,
+                        (Convert.ToDouble(posList[i++])+posy) / Planet.DistanceScale,
+                       (Convert.ToDouble(posList[i++])+posz) / Planet.DistanceScale);
                 pointCollection.Add(p);
             }
             return pointCollection;
@@ -118,13 +124,13 @@ namespace SolarsystemDemo
 
             Sphere.Radius = MeanRadius / (Planet.DiameterScale);
         }
-
+        public Point3D pos;
         void UpdatePosition()
         {
             double ang = 0;
             if (OrbitalPeriod != 0)
                 ang = SolarSystem.Days / OrbitalPeriod * Math.PI * 2;
-            var pos = CalculatePosition(ang, Planet.DistanceScale);
+            pos = CalculatePosition(ang, Planet.DistanceScale);
 
             // http://en.wikipedia.org/wiki/Axial_tilt
             // http://en.wikipedia.org/wiki/Rotation_period

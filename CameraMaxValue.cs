@@ -15,14 +15,17 @@ namespace SolarsystemDemo
             if(value!=null)
             {
                 ProjectionCamera camera = value as ProjectionCamera;
-                double max = 10000;
-                max = camera.Position.X >= camera.Position.Y ? camera.Position.X : camera.Position.Y;
-                max = max >= camera.Position.Z ? max : camera.Position.Z;
+                double max = 1000000;
+                double xPosition = Math.Abs(camera.Position.X);
+                double yPosition = Math.Abs(camera.Position.Y);
+                double zPosition = Math.Abs(camera.Position.Z);
+                max = xPosition >= yPosition ? xPosition : yPosition;
+                max = max >= zPosition ? max : zPosition;
                 max = max >= 10000?max:10000;
                 return max*10;
             }else
 
-            { return 10000; }
+            { return 1000000; }
         }
 
         public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
