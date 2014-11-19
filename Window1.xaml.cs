@@ -43,7 +43,7 @@ namespace SolarsystemDemo
             
             Loaded += new RoutedEventHandler(Window1_Loaded);
             DataContext = SolarSystem;
-            
+
         }
 
         void Window1_Loaded(object sender, RoutedEventArgs e)

@@ -58,9 +58,13 @@ namespace SolarsystemDemo
         {
             Time0 = DateTime.Now;
             this._textItem = new List<BillboardTextItem>();
-            this._textItem.Add(new BillboardTextItem { Text = "HXMT", Position = new Point3D(100, 100, 0), WorldDepthOffset = 50 });
+            this._textItem.Add(new BillboardTextItem { Text = "HXMT", Position = new Point3D(100, 100, 0), WorldDepthOffset = 50});
             this._textItem.Add(new BillboardTextItem { Text = "SUN", Position = new Point3D(0, 0, 0), WorldDepthOffset = 100 });
-        
+            //foreach(Satellite3D p in Children){
+            //    if(p.ObjectName == "Moon")
+            //        this._textItem.Add(new BillboardTextItem{Text = "Moon", Position = new Point3D(p.CalculatePosition)})
+
+            //}
         }
 
         public void InitModel()
@@ -74,14 +78,6 @@ namespace SolarsystemDemo
         {
             foreach (Planet3D p in Children)
                 p.UpdateModel();
-            foreach (Planet3D p in Children)
-            {
-                foreach (Satellite3D q in p.Satellites)
-                {
-                    if (q.ObjectName == "Moon")
-                        this._textItem.Add(new BillboardTextItem { Text = "Moon", Position = new Point3D(q.pos.X, q.pos.Y, q.pos.Z), WorldDepthOffset = 50 });
-                }
-            }
             //this.TextItem.Add(new BillboardTextItem { Text = "HXMT", Position = new Point3D(100, 100, 0), WorldDepthOffset = 50});
             //OnPropertyChanged("TextItem");
         }

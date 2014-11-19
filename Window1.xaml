@@ -1,4 +1,4 @@
-<Window x:Class="SolarsystemDemo.Window1"
+﻿<Window x:Class="SolarsystemDemo.Window1"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:helix="clr-namespace:HelixToolkit.Wpf;assembly=HelixToolkit.Wpf"
@@ -19,7 +19,7 @@
             <Slider Name="TimeSlider" DockPanel.Dock="Top" Value="{Binding Days}" Minimum="0" Maximum="365"/>
             <CheckBox x:Name="EarthView" Content="Earth View" Checked="EarthView_Checked" DockPanel.Dock="Bottom" Foreground="White" Margin="0,5,5,0" Unchecked="EarthView_Unchecked"/>
         </DockPanel>
-        <helix:HelixViewport3D x:Name="view1" InfiniteSpin="False" ShowCameraInfo="True" ShowFieldOfView="False"  ShowCoordinateSystem="True">
+        <helix:HelixViewport3D x:Name="view1" InfiniteSpin="False" ShowCameraInfo="False" ShowFieldOfView="False" ShowCoordinateSystem="True" >
             <!-- Sun light -->
             <ModelVisual3D>
                 <ModelVisual3D.Content>
@@ -33,7 +33,7 @@
             </ModelVisual3D>
             <!-- The solar system model -->
             <s:SolarSystem3D DistanceScale="1e6" DiameterScale="1e3">
-                <s:Planet3D ObjectName="Sun"  MeanRadius="13920" RotationPeriod="25.379995" foreground="Transparent" background="Transparent" />
+                <s:Planet3D ObjectName="Sun" MeanRadius="34800" RotationPeriod="25.379995" foreground="Transparent" background="Transparent" />
                 <s:Planet3D ObjectName="Mercury" 
                                     Aphelion="69816900" Perifelion="46001200" 
                                     SemiMajorAxis="57909100" Eccentricity="0.205630" 
@@ -72,7 +72,7 @@
                                     SemiMajorAxis="227939100" Eccentricity="0.093315" 
                                     OrbitalPeriod="686.971" 
                                     Inclination="1.67" LongitudeOfAscendingNode="49.562" ArgumentOfPerihelion="286.537"
-                                    MeanRadius="2439.7" RotationPeriod="1.02595675"
+                                    MeanRadius="3389.5" RotationPeriod="1.02595675"
                                     DistanceScale="2e3" DiameterScale="1e1"
                                     foreground="White" background="Transparent" borderbrush="Transparent" borderthickness="1" height="1e4" padding="2" depthoffset="1e2" font="Courier New">
                     <s:Planet3D.Satellites>
@@ -90,14 +90,14 @@
                                     SemiMajorAxis="778547200" Eccentricity="0.048775" 
                                     OrbitalPeriod="4331.572" 
                                     Inclination="0.32" LongitudeOfAscendingNode="100.492" ArgumentOfPerihelion="275.066"
-                                    MeanRadius="71492" RotationPeriod="0.41007"
+                                    MeanRadius="35746" RotationPeriod="0.41007"
                                     foreground="White" background="Transparent" borderbrush="Transparent" borderthickness="1" height="1e4" padding="2" depthoffset="1e-3" font="Arial"/>
                 <s:Planet3D ObjectName="Saturn" 
                                     Aphelion="0" Perifelion="0" 
                                     SemiMajorAxis="1433449370" Eccentricity="0.055723219" 
                                     OrbitalPeriod="10759.22" 
                                     Inclination="0.93" LongitudeOfAscendingNode="113.642811" ArgumentOfPerihelion="336.013862"
-                                    MeanRadius="60268" RotationPeriod="0.426"
+                                    MeanRadius="30134" RotationPeriod="0.426"
                                     foreground="White" background="Transparent" borderbrush="Transparent" borderthickness="1" height="1e4" padding="2" depthoffset="1e-3" font="Arial">
                 </s:Planet3D>
 
@@ -106,22 +106,21 @@
                                     SemiMajorAxis="2876679082" Eccentricity="0.044405586" 
                                     OrbitalPeriod="30799.095" 
                                     Inclination="1.02" LongitudeOfAscendingNode="73.989821" ArgumentOfPerihelion="96.541318"
-                                    MeanRadius="25559" RotationPeriod="-0.71833"
+                                    MeanRadius="12800" RotationPeriod="-0.71833"
                                     foreground="White" background="Transparent" borderbrush="Transparent" borderthickness="1" height="1e4" padding="2" depthoffset="1e-3" font="Arial"/>
                 <s:Planet3D ObjectName="Neptune" 
                                     Aphelion="0" Perifelion="0" 
                                     SemiMajorAxis="4503443661" Eccentricity="0.011214269" 
                                     OrbitalPeriod="60190" 
                                     Inclination="0.72" LongitudeOfAscendingNode="131.794310" ArgumentOfPerihelion="265.646853"
-                                    MeanRadius="24764" RotationPeriod="0.67125"
+                                    MeanRadius="20000" RotationPeriod="0.67125"
                                     foreground="White" background="Transparent" borderbrush="Transparent" borderthickness="1" height="1e4" padding="2" depthoffset="1e-3" font="Arial"/>
 
             </s:SolarSystem3D>
             <helix:SunLight/>
             <helix:CoordinateSystemVisual3D />
-            <helix:BillboardTextGroupVisual3D  x:Name="pinBoard" IsEnabled="True" BorderThickness="1" Padding="1" Offset="50,50" Items="{Binding TextItem}" Foreground="Yellow" FontSize="20" PinBrush="White" BorderBrush="White">
-
-            </helix:BillboardTextGroupVisual3D>
+            <helix:BillboardTextGroupVisual3D  x:Name="pinBoard" IsEnabled="True" 
+                                               BorderThickness="0,2,0,0" Padding="1,1,3,1" Offset="50,50" Items="{Binding TextItem}" FontSize="20" PinBrush="White" BorderBrush="White" PinWidth="2" Foreground="Yellow" FontFamily="Courier New"/>
             <helix:SphereVisual3D Center="100,100,0" Radius="3" Fill="Yellow" />
             <helix:PanoramaCube3D x:Name="panoramaCube3D" Source="Textures\skybox\" Size="{Binding Camera, ElementName=view1,Converter={StaticResource CameraMaxValueConverter}}" />
         </helix:HelixViewport3D>

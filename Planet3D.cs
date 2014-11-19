@@ -12,11 +12,16 @@ using HelixToolkit.Wpf;
 using System.Windows;
 using System.IO;
 using System.Collections;
+using System.Runtime.InteropServices;
 
 namespace SolarsystemDemo
 {
     public class Planet3D : TexturedObject3D
     {
+        [DllImport("LibExport.dll", CallingConvention = CallingConvention.Cdecl)]
+        static extern void fnLibExport(int y, int m, int d, int h, int mi, double sec,
+    int a, int aT, int b, int bT, double[] mat, double[] dis, string path, int pathlen);
+
         public IList<BillboardTextItem> TextItem;
         public double Aphelion { get; set; }
         public double Perifelion { get; set; }
@@ -60,19 +65,22 @@ namespace SolarsystemDemo
         public FontFamily font { get; set; }
 
         private Point3D SignPosition;
+        SolarSystem3D ss = new SolarSystem3D();
         
 
         BillboardTextVisual3D Sign;
 
         TubeVisual3D orbit;
         public Point3D Position { get; set; }
-        
+
+        double[] mat = new double[9];//行星的变换矩阵
+        double[] dis = new double[3];//行星与太阳距离
         public Planet3D()
         {
             Satellites = new List<Satellite3D>();
 
             orbit = new TubeVisual3D() {Diameter=0.8, ThetaDiv = 160 };
-            orbit.Material = MaterialHelper.CreateMaterial(null,Brushes.Blue,Brushes.Gray,0.5, 20);
+            orbit.Material = MaterialHelper.CreateMaterial(null,Brushes.Blue,Brushes.Gray,0.5, 0);
             Children.Add(orbit);
             Sign = new BillboardTextVisual3D()
             {
@@ -89,6 +97,37 @@ namespace SolarsystemDemo
             double e = Eccentricity;
             double b = a * Math.Sqrt(1 - e * e);
             Point3D p = new Point3D(Math.Cos(angle) * a, Math.Sin(angle) * b, 0);
+            return p;
+        }
+        //使用dll计算行星位置
+        public Point3D CalculatePosition(double scale)
+        {
+            
+            DateTime time = DateTime.Now;
+            int year = time.Year;
+            int month = time.Month;
+            int day = time.Day;
+            int hour = time.Hour;
+            int min = time.Minute;
+            double sec = time.Second;
+            int a = 4;//原点坐标系
+            int aT = 11;//原点行星代码，11为太阳
+            int b = 1;//目标坐标系
+            int bT = 4;//目标行星代码，1-8从近到远
+            string path = "C:\\spicedata";
+            int pathlen = path.Length;
+            //fnLibExport(year,month,day,hour,min,sec,a,aT,b,bT,mat,dis,path,pathlen);
+             try 
+	        {	        
+		        ZBZH_PLANET(year, month, day, hour, min, sec, a, aT, b, bT, mat, dis, path, pathlen);
+	        }
+	        catch (Exception ex)
+	        {
+		
+		        throw ex;
+	        }
+
+            Point3D p = new Point3D(dis[0]/scale,dis[1]/scale,dis[2]/scale);
             return p;
         }
         //从文件中读取行星的轨道数据
@@ -167,7 +206,10 @@ namespace SolarsystemDemo
             double ang = 0;
             if (OrbitalPeriod > 0)
                 ang = SolarSystem.Days / OrbitalPeriod * Math.PI * 2;
-            Position = CalculatePosition(ang, SolarSystem.DistanceScale);
+            if (base.ObjectName == "Mars")
+                Position = CalculatePosition(SolarSystem.DistanceScale);
+            else 
+                Position = CalculatePosition(ang, SolarSystem.DistanceScale);
             SignPosition = new Point3D(Position.X, Position.Y, Position.Z);
             // http://en.wikipedia.org/wiki/Axial_tilt
             // http://en.wikipedia.org/wiki/Rotation_period
@@ -213,6 +255,9 @@ namespace SolarsystemDemo
             foreach (var s in Satellites)
                 s.UpdateModel();
         }
-        
+
+        [DllImport("ZBZH_PLANET.dll")]
+        static extern void ZBZH_PLANET(int y, int m, int d, int h, int mi, double sec,
+    int a, int aT, int b, int bT, double[] mat, double[] dis, string path, int pathlen);
     }
 }

@@ -38,12 +38,25 @@ namespace SolarsystemDemo
         public SolarSystem3D SolarSystem { get; set; }
         TubeVisual3D orbit;
 
+        private IList<BillboardTextItem> _textItem;
+        public IList<BillboardTextItem> TextItem
+        {
+            get { return _textItem; }
+            set
+            {
+                _textItem = value;
+                OnPropertyChanged("TextItem");
+            }
+        }
+
         public Satellite3D()
         {
             orbit = new TubeVisual3D() { Diameter = 0.3, ThetaDiv = 12 };
             orbit.Material = MaterialHelper.CreateMaterial(null, Brushes.Gray, Brushes.White, 0.5, 40);
 
             Children.Add(orbit);
+            //if (ObjectName != null)
+            //    this._textItem.Add(new BillboardTextItem { Text = ObjectName, Position = new Point3D(100, 100, 100), WorldDepthOffset = 50 });
         }
 
         public Point3D CalculatePosition(double angle, double scale)
@@ -84,9 +97,9 @@ namespace SolarsystemDemo
 
             for (int i = 0; i < posList.Count; )
             {
-                p = new Point3D((Convert.ToDouble(posList[i++]) + posx) / Planet.DistanceScale,
-                        (Convert.ToDouble(posList[i++])+posy) / Planet.DistanceScale,
-                       (Convert.ToDouble(posList[i++])+posz) / Planet.DistanceScale);
+                p = new Point3D(Convert.ToDouble(posList[i++]) / Planet.DistanceScale,
+                        Convert.ToDouble(posList[i++]) / Planet.DistanceScale,
+                        Convert.ToDouble(posList[i++]) / Planet.DistanceScale);
                 pointCollection.Add(p);
             }
             return pointCollection;
@@ -106,7 +119,7 @@ namespace SolarsystemDemo
 
         public void UpdateOrbit()
         {
-            if (ObjectName == "Moon") 
+            if (ObjectName == "") 
             {
                 orbit.Path = ReadPosition(ObjectName);
                 orbit.UpdateModel();
@@ -124,13 +137,13 @@ namespace SolarsystemDemo
 
             Sphere.Radius = MeanRadius / (Planet.DiameterScale);
         }
-        public Point3D pos;
+
         void UpdatePosition()
         {
             double ang = 0;
             if (OrbitalPeriod != 0)
                 ang = SolarSystem.Days / OrbitalPeriod * Math.PI * 2;
-            pos = CalculatePosition(ang, Planet.DistanceScale);
+            var pos = CalculatePosition(ang, Planet.DistanceScale);
 
             // http://en.wikipedia.org/wiki/Axial_tilt
             // http://en.wikipedia.org/wiki/Rotation_period
@@ -159,5 +172,15 @@ namespace SolarsystemDemo
             UpdatePosition();
         }
 
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            var handler = PropertyChanged;
+            if (handler != null)
+            {
+                handler(this, new PropertyChangedEventArgs(propertyName));
+            }
+        }
+        
+        public event PropertyChangedEventHandler PropertyChanged;
     }
 }
