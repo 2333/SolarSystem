@@ -51,7 +51,7 @@ namespace SolarsystemDemo
 
         private void TimeChanged()
         {
-            UpdateModel();
+            UpdateModel(Time);
         }
 
         public SolarSystem3D()
@@ -80,6 +80,11 @@ namespace SolarsystemDemo
                 p.UpdateModel();
             //this.TextItem.Add(new BillboardTextItem { Text = "HXMT", Position = new Point3D(100, 100, 0), WorldDepthOffset = 50});
             //OnPropertyChanged("TextItem");
+        }
+        public void UpdateModel(DateTime time)
+        {
+            foreach (Planet3D p in Children)
+                p.UpdateModel(time);
         }
 
         protected virtual void OnPropertyChanged(string propertyName)

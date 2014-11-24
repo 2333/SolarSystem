@@ -77,3 +77,5 @@ C:\Users\BrotherKai\Desktop\SolarSystem-master\SolarSystem-master\obj\Debug\Sola
 C:\Users\BrotherKai\Desktop\SolarSystem-master\SolarSystem-master\obj\Debug\SolarsystemDemo.Properties.Resources.resources
 C:\Users\BrotherKai\Desktop\SolarSystem-master\SolarSystem-master\obj\Debug\SolarsystemDemo.csproj.GenerateResource.Cache
 C:\Users\BrotherKai\Desktop\SolarSystem-master\SolarSystem-master\obj\Debug\SolarsystemDemo.csprojFakesResolveAssemblyReference.cache
+C:\Users\BrotherKai\Desktop\helix-toolkit-master\Source\Examples\WPF\SolarsystemDemo\bin\Debug\zh-Hans\Microsoft.QualityTools.Testing.Fakes.resources.dll
+C:\Users\BrotherKai\Desktop\helix-toolkit-master\Source\Examples\WPF\SolarsystemDemo\obj\Debug\SolarsystemDemo.csprojResolveAssemblyReference.cache

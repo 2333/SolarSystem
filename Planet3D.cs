@@ -65,14 +65,14 @@ namespace SolarsystemDemo
         public FontFamily font { get; set; }
 
         private Point3D SignPosition;
-        SolarSystem3D ss = new SolarSystem3D();
+        //SolarSystem3D ss = new SolarSystem3D();
         
 
         BillboardTextVisual3D Sign;
 
         TubeVisual3D orbit;
         public Point3D Position { get; set; }
-
+        DateTime time0;
         double[] mat = new double[9];//行星的变换矩阵
         double[] dis = new double[3];//行星与太阳距离
         public Planet3D()
@@ -100,10 +100,10 @@ namespace SolarsystemDemo
             return p;
         }
         //使用dll计算行星位置
-        public Point3D CalculatePosition(double scale)
+        public Point3D CalculatePosition(double scale, DateTime time, int planetnum)
         {
             
-            DateTime time = DateTime.Now;
+            //DateTime time = DateTime.Now;
             int year = time.Year;
             int month = time.Month;
             int day = time.Day;
@@ -113,7 +113,7 @@ namespace SolarsystemDemo
             int a = 4;//原点坐标系
             int aT = 11;//原点行星代码，11为太阳
             int b = 1;//目标坐标系
-            int bT = 4;//目标行星代码，1-8从近到远
+            int bT = planetnum;//目标行星代码，1-8从近到远
             string path = "C:\\spicedata";
             int pathlen = path.Length;
             //fnLibExport(year,month,day,hour,min,sec,a,aT,b,bT,mat,dis,path,pathlen);
@@ -200,16 +200,46 @@ namespace SolarsystemDemo
 
             Sphere.Radius = MeanRadius / SolarSystem.DiameterScale;
         }
-
+        
         void UpdatePosition()
         {
             double ang = 0;
             if (OrbitalPeriod > 0)
                 ang = SolarSystem.Days / OrbitalPeriod * Math.PI * 2;
-            if (base.ObjectName == "Mars")
-                Position = CalculatePosition(SolarSystem.DistanceScale);
-            else 
-                Position = CalculatePosition(ang, SolarSystem.DistanceScale);
+            Position = CalculatePosition(ang, SolarSystem.DistanceScale);
+            SignPosition = new Point3D(Position.X, Position.Y, Position.Z);
+            // http://en.wikipedia.org/wiki/Axial_tilt
+            // http://en.wikipedia.org/wiki/Rotation_period
+            var rotang = SolarSystem.Days / RotationPeriod * 360;
+            var axis = new Vector3D(0, 0, 1); // todo: should be normal to orbital plane
+
+            var tg = new Transform3DGroup();
+            tg.Children.Add(new RotateTransform3D(new AxisAngleRotation3D(axis, rotang)));
+            tg.Children.Add(new TranslateTransform3D(Position.X, Position.Y, Position.Z));
+            Sphere.Transform = tg;
+            var stg = new Transform3DGroup();
+
+            if (base.ObjectName != "Sun")
+                stg.Children.Add(new TranslateTransform3D(Position.X, Position.Y - 1e1, Position.Z + Sphere.Radius * 2));
+            else
+            {
+                stg.Children.Add(new TranslateTransform3D(0, 0, 0));
+                Sign.Height = 0;
+            }
+            Sign.Foreground = foreground;
+            Sign.Background = background;
+            Sign.BorderThickness = borderthickness;
+            Sign.FontFamily = font;
+            Sign.Text = base.ObjectName;
+            Sign.Transform = stg;
+        }
+
+        void UpdatePosition(DateTime time)
+        {
+            double ang = 0;
+            if (OrbitalPeriod > 0)
+                ang = SolarSystem.Days / OrbitalPeriod * Math.PI * 2;
+            Position = CalculatePosition(SolarSystem.DistanceScale, time, Convert.ToInt32(Enum.Parse(typeof(planetnum),base.ObjectName)));
             SignPosition = new Point3D(Position.X, Position.Y, Position.Z);
             // http://en.wikipedia.org/wiki/Axial_tilt
             // http://en.wikipedia.org/wiki/Rotation_period
@@ -240,6 +270,7 @@ namespace SolarsystemDemo
         public void InitModel(SolarSystem3D ss)
         {
             SolarSystem = ss;
+            time0 = ss.Time;
             UpdateTransform();
             UpdateOrbit();
             foreach (var s in Satellites)
@@ -251,11 +282,34 @@ namespace SolarsystemDemo
 
         public void UpdateModel()
         {
-            UpdatePosition();
+            if (base.ObjectName != "Sun")
+                UpdatePosition(time0);
+            else
+                UpdatePosition();
             foreach (var s in Satellites)
                 s.UpdateModel();
         }
-
+        public void UpdateModel(DateTime time)
+        {
+            if (base.ObjectName != "Sun")
+                UpdatePosition(time);
+            else
+                UpdatePosition();
+            foreach (var s in Satellites)
+                s.UpdateModel();
+        }
+        internal enum planetnum : int
+        {
+            Mercury = 1,
+            Venus = 2,
+            Earth = 3,
+            Mars = 4,
+            Jupiter = 5,
+            Saturn = 6,
+            Uranus = 7,
+            Neptune = 8
+        }
+     
         [DllImport("ZBZH_PLANET.dll")]
         static extern void ZBZH_PLANET(int y, int m, int d, int h, int mi, double sec,
     int a, int aT, int b, int bT, double[] mat, double[] dis, string path, int pathlen);
